@@ -1,6 +1,39 @@
 -- 75 Hard Fitness Analytics Database Schema
 
 
+DROP TABLE IF EXISTS workout_sets;
+DROP TABLE IF EXISTS workout_sessions;
+DROP TABLE IF EXISTS exercises;
+DROP TABLE IF EXISTS daily_checkin;
+DROP TABLE IF EXISTS body_metrics;
+DROP TABLE IF EXISTS cardio_sessions;
+
+
+CREATE TABLE exercises (
+    id SERIAL PRIMARY KEY,
+    exercise_name VARCHAR(100) NOT NULL,
+    muscle_group VARCHAR(50)
+);
+
+
+CREATE TABLE workout_sessions (
+    id SERIAL PRIMARY KEY,
+    date DATE NOT NULL,
+    workout_type VARCHAR(50)
+);
+
+
+CREATE TABLE workout_sets (
+    id SERIAL PRIMARY KEY,
+    workout_session_id INT REFERENCES workout_sessions(id),
+    exercise_id INT REFERENCES exercises(id),
+    set_number INT,
+    reps INT,
+    weight_kg DECIMAL(5,2),
+    rir INT
+);
+
+
 CREATE TABLE daily_checkin (
     id SERIAL PRIMARY KEY,
     date DATE NOT NULL,
@@ -15,17 +48,6 @@ CREATE TABLE daily_checkin (
 );
 
 
-CREATE TABLE workouts (
-    id SERIAL PRIMARY KEY,
-    date DATE NOT NULL,
-    workout_type VARCHAR(50),
-    exercise VARCHAR(100),
-    sets INT,
-    reps INT,
-    weight_kg DECIMAL(5,2)
-);
-
-
 CREATE TABLE body_metrics (
     id SERIAL PRIMARY KEY,
     date DATE NOT NULL,
@@ -36,7 +58,7 @@ CREATE TABLE body_metrics (
 );
 
 
-CREATE TABLE cardio (
+CREATE TABLE cardio_sessions (
     id SERIAL PRIMARY KEY,
     date DATE NOT NULL,
     activity_type VARCHAR(50),
@@ -44,7 +66,3 @@ CREATE TABLE cardio (
     duration_minutes INT,
     average_heart_rate INT
 );
-
-SELECT table_name
-FROM information_schema.tables
-WHERE table_schema = 'public';
